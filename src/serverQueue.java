@@ -179,21 +179,21 @@ public class serverQueue {
 //        System.out.println("Queue length");
 //        System.out.println(queueLength.toString());
         SwingUtilities.invokeLater(() -> {
-            LineChartExample example = new LineChartExample(str, delays, queueLength, "Waiting TIme");
+            LineChartExample example = new LineChartExample(str, delays, "Waiting TIme");
             example.setAlwaysOnTop(true);
             example.pack();
             example.setSize(600, 400);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             example.setVisible(true);
         });
-        SwingUtilities.invokeLater(() -> {
-            LineChartExample example = new LineChartExample(str, servingTime, queueLength, "Serving Time");
-            example.setAlwaysOnTop(true);
-            example.pack();
-            example.setSize(600, 400);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            example.setVisible(true);
-        });
+//        SwingUtilities.invokeLater(() -> {
+//            LineChartExample example = new LineChartExample(str, queueLength, "Queue Length");
+//            example.setAlwaysOnTop(true);
+//            example.pack();
+//            example.setSize(600, 400);
+//            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//            example.setVisible(true);
+//        });
 
     }
 

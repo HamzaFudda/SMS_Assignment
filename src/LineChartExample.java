@@ -26,10 +26,10 @@ public class LineChartExample extends JFrame {
         ChartPanel panel = new ChartPanel(chart);
         setContentPane(panel);
     }
-    public LineChartExample(String title,ArrayList<Double> yAxis,ArrayList<Integer> xAxis,String str) {
+    public LineChartExample(String title,ArrayList<Double> yAxis,String str) {
         super(title);
         // Create dataset
-        DefaultCategoryDataset dataset = createDataset(yAxis,xAxis);
+        DefaultCategoryDataset dataset = createDataset(yAxis);
         // Create chart
         JFreeChart chart = ChartFactory.createLineChart(
                 "Simulation", // Chart title
@@ -55,13 +55,13 @@ public class LineChartExample extends JFrame {
 
         return dataset;
     }
-    private DefaultCategoryDataset createDataset(ArrayList<Double> yAxis,ArrayList<Integer> xAxis) {
+    private DefaultCategoryDataset createDataset(ArrayList<Double> yAxis) {
 
         String series1 = "";
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for(int i=0; i<yAxis.size();i++){
-            dataset.addValue(yAxis.get(i), series1,xAxis.get(i));
+            dataset.addValue(yAxis.get(i), series1,""+i);
         }
 
         return dataset;
