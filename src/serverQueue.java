@@ -1,5 +1,14 @@
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.lang.Object;
 
-public class serverQueue {
+public class serverQueue extends JFrame {
     //declaring some lists to handle data and store queue calculations
     ArrayList<Double> interTime = new ArrayList<Double>();
     ArrayList<Double> arrivalTime = new ArrayList<Double>();
@@ -19,12 +28,22 @@ public class serverQueue {
     ArrayList<Integer> queueLength = new ArrayList<Integer>();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         serverQueue sq = new serverQueue();
 //        sq.initialize2();
         sq.gaussian_ST_Initialize();
         sq.IID_IAT_initialize();
         sq.simulation("Gaussian");
+        sq.graph();
+        SwingUtilities.invokeLater(() -> {
+
+            sq.setLocationRelativeTo(null);
+            sq.pack();
+            sq.setSize(600, 400);
+            sq.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            sq.setVisible(true);
+        });
+
         serverQueue sq2 = new serverQueue();
         sq2.IID_ST_initialize();
         sq2.IID_IAT_initialize();
@@ -178,14 +197,14 @@ public class serverQueue {
 //        System.out.println(exitTime.toString());
 //        System.out.println("Queue length");
 //        System.out.println(queueLength.toString());
-        SwingUtilities.invokeLater(() -> {
-            LineChartExample example = new LineChartExample(str, delays, "Waiting TIme");
-            example.setAlwaysOnTop(true);
-            example.pack();
-            example.setSize(600, 400);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            example.setVisible(true);
-        });
+//        SwingUtilities.invokeLater(() -> {
+//            LineChartExample example = new LineChartExample(str, delays, "Waiting TIme");
+//            example.setAlwaysOnTop(true);
+//            example.pack();
+//            example.setSize(600, 400);
+//            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//            example.setVisible(true);
+//        });
 //        SwingUtilities.invokeLater(() -> {
 //            LineChartExample example = new LineChartExample(str, queueLength, "Queue Length");
 //            example.setAlwaysOnTop(true);
@@ -197,8 +216,27 @@ public class serverQueue {
 
     }
 
-    public void graph() {
+    public void graph() throws IOException {
 
+        DefaultCategoryDataset WTdataset = new DefaultCategoryDataset();
+        DefaultCategoryDataset QLdataset = new DefaultCategoryDataset();
 
+        //wt
+        for (int i = 0; i < delays.size(); i++) {
+            WTdataset.addValue(delays.get(i), "Waiting Time", Integer.toString(i));
+
+        }
+        JFreeChart lineChartObject = ChartFactory.createLineChart(
+                "Waiting Time VS Customers", "Customers",
+                "Waiting Time",
+                WTdataset, PlotOrientation.VERTICAL,
+                true, true, false);
+
+        int width = 640;    /* Width of the image */
+        int height = 480;   /* Height of the image */
+        ChartPanel panel = new ChartPanel(lineChartObject);
+        setContentPane(panel);
+        File lineChart = new File("WatingTime.jpeg");
+        ChartUtilities.saveChartAsJPEG(lineChart, lineChartObject, width, height);
     }
 }
