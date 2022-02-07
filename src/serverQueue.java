@@ -37,22 +37,22 @@ public class serverQueue extends JFrame {
             sq.IID_IAT_initialize();
             sq.simulation();
             sq.WTGraph(10, "for 10 Gaussian",sq.delays);
-            sq.WTGraph(100, "for 100 Gaussian",sq.delays);
-            //sq.WTGraph(100000,"for 100000 Gaussian",sq.delays);
+//            sq.WTGraph(100, "for 100 Gaussian",sq.delays);
+//            sq.WTGraph(100000,"for 100000 Gaussian",sq.delays);
             sq.QLGraph(10, "for 10 Gaussian",sq.queueLength);
-            sq.QLGraph(100, "for 100 Gaussian",sq.queueLength);
-            //sq.QLGraph(100000,"for 100000 Gaussian",sq.queueLength);
+//            sq.QLGraph(100, "for 100 Gaussian",sq.queueLength);
+//            sq.QLGraph(100000,"for 100000 Gaussian",sq.queueLength);
 
-            serverQueue sq2 = new serverQueue();
-            sq2.IID_ST_initialize();
-            sq2.IID_IAT_initialize();
-            sq2.simulation();
-            sq2.WTGraph(10, "for 10 IID",sq2.delays);
-            sq2.WTGraph(100, "for 100 IID",sq2.delays);
-            //sq2.WTGraph(100000,"for 100000 IID",sq2.delays);
-            sq2.QLGraph(10, "for 10 IID",sq2.queueLength);
-            sq2.QLGraph(100, "for 100 IID",sq2.queueLength);
-            //sq2.QLGraph(100000,"for 100000 IID",sq2.queueLength);
+//            serverQueue sq2 = new serverQueue();
+//            sq2.IID_ST_initialize();
+//            sq2.IID_IAT_initialize();
+//            sq2.simulation();
+//            sq2.WTGraph(10, "for 10 IID",sq2.delays);
+//            sq2.WTGraph(100, "for 100 IID",sq2.delays);
+//            //sq2.WTGraph(100000,"for 100000 IID",sq2.delays);
+//            sq2.QLGraph(10, "for 10 IID",sq2.queueLength);
+//            sq2.QLGraph(100, "for 100 IID",sq2.queueLength);
+//            //sq2.QLGraph(100000,"for 100000 IID",sq2.queueLength);
 
         });
 
@@ -199,18 +199,14 @@ public class serverQueue extends JFrame {
     }
 
     public void WTGraph(int i, String str, ArrayList<Double> list){
-        graph example=new graph();
-        example.waitingGraph(i,str,list);
-        example.setAlwaysOnTop(true);
+        graphing example=new graphing(str,str,"Waiting Time",i,"",list);
         example.pack();
         example.setSize(600, 400);
         example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         example.setVisible(true);
     }
     public void QLGraph(int i, String str, ArrayList<Integer> list){
-        graph example=new graph();
-        example.queueLengthGraph(i,str,list);
-        example.setAlwaysOnTop(true);
+        graphing example=new graphing(str,str,"Queue Length",i,list,"");
         example.pack();
         example.setSize(600, 400);
         example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
