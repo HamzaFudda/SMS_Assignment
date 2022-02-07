@@ -11,11 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.lang.Object;
 
 public class serverQueue extends JFrame {
     //declaring some lists to handle data and store queue calculations
@@ -29,37 +26,38 @@ public class serverQueue extends JFrame {
 
 
     public static void main(String[] args) throws IOException {
-        serverQueue sq = new serverQueue();
-//        sq.initialize2();
-        sq.gaussian_ST_Initialize();
-        sq.IID_IAT_initialize();
-        sq.simulation("Gaussian");
-        sq.graph();
-        SwingUtilities.invokeLater(() -> {
 
-            sq.setLocationRelativeTo(null);
-            sq.pack();
-            sq.setSize(600, 400);
-            sq.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            sq.setVisible(true);
+
+
+
+
+        SwingUtilities.invokeLater(() -> {
+            serverQueue sq = new serverQueue();
+            sq.gaussian_ST_Initialize();
+            sq.IID_IAT_initialize();
+            sq.simulation();
+            sq.WTGraph(10, "for 10 Gaussian",sq.delays);
+            sq.WTGraph(100, "for 100 Gaussian",sq.delays);
+            //sq.WTGraph(100000,"for 100000 Gaussian",sq.delays);
+            sq.QLGraph(10, "for 10 Gaussian",sq.queueLength);
+            sq.QLGraph(100, "for 100 Gaussian",sq.queueLength);
+            //sq.QLGraph(100000,"for 100000 Gaussian",sq.queueLength);
+
+            serverQueue sq2 = new serverQueue();
+            sq2.IID_ST_initialize();
+            sq2.IID_IAT_initialize();
+            sq2.simulation();
+            sq2.WTGraph(10, "for 10 IID",sq2.delays);
+            sq2.WTGraph(100, "for 100 IID",sq2.delays);
+            //sq2.WTGraph(100000,"for 100000 IID",sq2.delays);
+            sq2.QLGraph(10, "for 10 IID",sq2.queueLength);
+            sq2.QLGraph(100, "for 100 IID",sq2.queueLength);
+            //sq2.QLGraph(100000,"for 100000 IID",sq2.queueLength);
+
         });
 
-        serverQueue sq2 = new serverQueue();
-        sq2.IID_ST_initialize();
-        sq2.IID_IAT_initialize();
-        sq2.simulation("IID");
-
     }
 
-    public void clearAll() {
-        interTime.clear();
-        arrivalTime.clear();
-        delays.clear();
-        custServedTime.clear();
-        servingTime.clear();
-        exitTime.clear();
-        queueLength.clear();
-    }
 
     public void gaussian_ST_Initialize() {
         Random random = new Random();
@@ -141,7 +139,7 @@ public class serverQueue extends JFrame {
 
 
     //all work takes place here
-    public void simulation(String str) {
+    public void simulation() {
         int qLength = 0;
         double delay_time = 0.0;
         double exit_time = 0.0;
@@ -197,46 +195,25 @@ public class serverQueue extends JFrame {
 //        System.out.println(exitTime.toString());
 //        System.out.println("Queue length");
 //        System.out.println(queueLength.toString());
-//        SwingUtilities.invokeLater(() -> {
-//            LineChartExample example = new LineChartExample(str, delays, "Waiting TIme");
-//            example.setAlwaysOnTop(true);
-//            example.pack();
-//            example.setSize(600, 400);
-//            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//            example.setVisible(true);
-//        });
-//        SwingUtilities.invokeLater(() -> {
-//            LineChartExample example = new LineChartExample(str, queueLength, "Queue Length");
-//            example.setAlwaysOnTop(true);
-//            example.pack();
-//            example.setSize(600, 400);
-//            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//            example.setVisible(true);
-//        });
 
     }
 
-    public void graph() throws IOException {
-
-        DefaultCategoryDataset WTdataset = new DefaultCategoryDataset();
-        DefaultCategoryDataset QLdataset = new DefaultCategoryDataset();
-
-        //wt
-        for (int i = 0; i < delays.size(); i++) {
-            WTdataset.addValue(delays.get(i), "Waiting Time", Integer.toString(i));
-
-        }
-        JFreeChart lineChartObject = ChartFactory.createLineChart(
-                "Waiting Time VS Customers", "Customers",
-                "Waiting Time",
-                WTdataset, PlotOrientation.VERTICAL,
-                true, true, false);
-
-        int width = 640;    /* Width of the image */
-        int height = 480;   /* Height of the image */
-        ChartPanel panel = new ChartPanel(lineChartObject);
-        setContentPane(panel);
-        File lineChart = new File("WatingTime.jpeg");
-        ChartUtilities.saveChartAsJPEG(lineChart, lineChartObject, width, height);
+    public void WTGraph(int i, String str, ArrayList<Double> list){
+        graph example=new graph();
+        example.waitingGraph(i,str,list);
+        example.setAlwaysOnTop(true);
+        example.pack();
+        example.setSize(600, 400);
+        example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        example.setVisible(true);
+    }
+    public void QLGraph(int i, String str, ArrayList<Integer> list){
+        graph example=new graph();
+        example.queueLengthGraph(i,str,list);
+        example.setAlwaysOnTop(true);
+        example.pack();
+        example.setSize(600, 400);
+        example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        example.setVisible(true);
     }
 }
