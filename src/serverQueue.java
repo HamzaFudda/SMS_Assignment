@@ -5,6 +5,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 
 import javax.swing.*;
 import java.io.File;
@@ -13,52 +14,107 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import java.util.Random;
+import java.util.Scanner;
+
+
+//This class is the main class which also uses graphing class to plot the graph
+//Have some patience it takes time to calculate then it gives option to plot the graph against diff values
+
 
 public class serverQueue extends JFrame {
     //declaring some lists to handle data and store queue calculations
+    //inter arrival time
     ArrayList<Double> interTime = new ArrayList<Double>();
+    //arrival times
     ArrayList<Double> arrivalTime = new ArrayList<Double>();
+    //waiting time
     ArrayList<Double> delays = new ArrayList<Double>();
+    //time at which customer is served
     ArrayList<Double> custServedTime = new ArrayList<Double>();
+    //serving time
     ArrayList<Double> servingTime = new ArrayList<Double>();
+    //exit time
     ArrayList<Double> exitTime = new ArrayList<Double>();
+    //queue length
     ArrayList<Integer> queueLength = new ArrayList<Integer>();
 
 
-    public static void main(String[] args) throws IOException {
-
-
-
-
+    public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
-            serverQueue sq = new serverQueue();
-            sq.gaussian_ST_Initialize();
-            sq.IID_IAT_initialize();
-            sq.simulation();
-            sq.WTGraph(10, "for 10 Gaussian",sq.delays);
-//            sq.WTGraph(100, "for 100 Gaussian",sq.delays);
-//            sq.WTGraph(100000,"for 100000 Gaussian",sq.delays);
-            sq.QLGraph(10, "for 10 Gaussian",sq.queueLength);
-//            sq.QLGraph(100, "for 100 Gaussian",sq.queueLength);
-//            sq.QLGraph(100000,"for 100000 Gaussian",sq.queueLength);
 
-//            serverQueue sq2 = new serverQueue();
-//            sq2.IID_ST_initialize();
-//            sq2.IID_IAT_initialize();
-//            sq2.simulation();
-//            sq2.WTGraph(10, "for 10 IID",sq2.delays);
-//            sq2.WTGraph(100, "for 100 IID",sq2.delays);
-//            //sq2.WTGraph(100000,"for 100000 IID",sq2.delays);
-//            sq2.QLGraph(10, "for 10 IID",sq2.queueLength);
-//            sq2.QLGraph(100, "for 100 IID",sq2.queueLength);
-//            //sq2.QLGraph(100000,"for 100000 IID",sq2.queueLength);
+            //First server queue to utilise Gaussian Distribution
+            serverQueue sq = new serverQueue();
+            //Method to initialize Serving times in the array list by gaussian
+            sq.gaussian_ST_Initialize();
+            //Method to initialize inter arrival times in the array list
+            sq.IID_IAT_initialize();
+            //This method does all the calculation
+            sq.simulation();
+
+            //method to draw graph of waiting time against customers
+//            sq.WTGraph(10, "For 10 customers Gaussian", sq.delays);
+//            sq.WTGraph(100, "For 100 customers Gaussian",sq.delays);
+//            sq.WTGraph(100000,"For 100000 customers Gaussian",sq.delays);
+            //method to draw graph of queue length against customers
+//            sq.QLGraph(10, "For 10 customers Gaussian", sq.queueLength);
+//            sq.QLGraph(100, "For 100 customers Gaussian",sq.queueLength);
+//            sq.QLGraph(100000,"For 100000 customers Gaussian",sq.queueLength);
+
+            serverQueue sq2 = new serverQueue();
+            //Method to initialize Serving times in the array list by IID
+            sq2.IID_ST_initialize();
+            sq2.IID_IAT_initialize();
+            sq2.simulation();
+            //sq2.WTGraph(10, "For 10 customers IID",sq2.delays);
+            //sq2.WTGraph(100, "For 100 customers IID",sq2.delays);
+            //sq2.WTGraph(100000,"For 100000 customers IID",sq2.delays);
+            //sq2.QLGraph(10, "For 10 customers IID",sq2.queueLength);
+            //sq2.QLGraph(100, "For 100 customers IID",sq2.queueLength);
+            //sq2.QLGraph(100000,"For 100000 customers IID",sq2.queueLength);
+
+            System.out.println("Select choice of no of customers to plot the graph");
+            System.out.println("Options are below");
+            System.out.println("1- For 10 customers");
+            System.out.println("2- For 100 customers");
+            System.out.println("3- For 1000 customers");
+            System.out.println("4- For 10000 customers");
+            System.out.println("5- For 100000 customers");
+
+
+            Scanner x= new Scanner(System.in);
+            int option=0;
+            while(option<1 || option>4){
+                option=Integer.parseInt(x.nextLine());
+            }
+            int multiple=0;
+            switch (option){
+                case 1:
+                    multiple=10;
+                    break;
+                case 2:
+                    multiple=100;
+                    break;
+                case 3:
+                    multiple=1000;
+                    break;
+                case 4:
+                    multiple=10000;
+                    break;
+                case 5:
+                    multiple=100000;
+                    break;
+            }
+            sq.WTGraph(multiple, "For "+multiple+" customers Gaussian", sq.delays);
+            sq.QLGraph(multiple, "For "+multiple+" customers Gaussian", sq.queueLength);
+            sq2.WTGraph(multiple, "For "+multiple+" customers IID",sq2.delays);
+            sq2.QLGraph(multiple, "For "+multiple+" customers IID",sq2.queueLength);
 
         });
 
     }
 
-
+    //generates serving time according to gaussian
     public void gaussian_ST_Initialize() {
         Random random = new Random();
         double num;
@@ -66,15 +122,17 @@ public class serverQueue extends JFrame {
         for (int i = 0; i < 100000; i++) {
             num = random.nextGaussian() * 5 + 10;
             if (num < 0) {
-                num = num * -1;
+                while (num < 0) {
+                    num = random.nextGaussian() * 5 + 10;
+                }
             }
-//            total = total + num;
-            //System.out.println(Math.floor(num * 100) / 100.0);
+            total = total + num;
             servingTime.add(Math.floor(num * 100) / 100.0);
         }
+       // System.out.println(total / 100000.0);
 
     }
-
+    //generates serving time according to IID
     public void IID_ST_initialize() {
         double num;
         double total = 0.0;
@@ -86,6 +144,7 @@ public class serverQueue extends JFrame {
         }
     }
 
+    //generates inter arrival times according to IID
     public void IID_IAT_initialize() {
         double num;
         double total = 0.0;
@@ -103,6 +162,7 @@ public class serverQueue extends JFrame {
 
     }
 
+    //for hard coded data
     public void initialize() {
         //call methods to set arrival time and serving time
         arrivalTime.add(0.5);
@@ -118,9 +178,8 @@ public class serverQueue extends JFrame {
 
     }
 
-
+    //for hard coded data
     public void initialize2() {
-
         arrivalTime.add(1.3);
         arrivalTime.add(3.800000001);
         arrivalTime.add(6.5);
@@ -137,8 +196,8 @@ public class serverQueue extends JFrame {
         servingTime.add(5.0);
     }
 
-
     //all work takes place here
+    //it uses multiple conditions to calculate values and populates it in their respective array list
     public void simulation() {
         int qLength = 0;
         double delay_time = 0.0;
@@ -198,18 +257,24 @@ public class serverQueue extends JFrame {
 
     }
 
-    public void WTGraph(int i, String str, ArrayList<Double> list){
-        graphing example=new graphing(str,str,"Waiting Time",i,"",list);
+    //To create wait time against customers graph
+    public void WTGraph(int i, String str, ArrayList<Double> list) {
+        graphing example = new graphing(str, str, "Waiting Time", i, "", list);
         example.pack();
         example.setSize(600, 400);
         example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        RefineryUtilities.centerFrameOnScreen(example);
         example.setVisible(true);
     }
-    public void QLGraph(int i, String str, ArrayList<Integer> list){
-        graphing example=new graphing(str,str,"Queue Length",i,list,"");
+
+    //To create queue length against customers graph
+    public void QLGraph(int i, String str, ArrayList<Integer> list) {
+        graphing example = new graphing(str, str, "Queue Length", i, list, "");
         example.pack();
         example.setSize(600, 400);
         example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        RefineryUtilities.centerFrameOnScreen(example);
         example.setVisible(true);
+
     }
 }

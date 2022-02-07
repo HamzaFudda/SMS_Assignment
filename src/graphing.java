@@ -16,6 +16,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import javax.swing.*;
 
+//class to draw graphs
 public class graphing extends ApplicationFrame {
     public graphing(String title) {
         super(title);
@@ -36,7 +37,7 @@ public class graphing extends ApplicationFrame {
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false );
         renderer.setSeriesPaint( 0 , Color.BLUE );
-        renderer.setSeriesStroke( 0 , new BasicStroke( 1.0f ) );
+        renderer.setSeriesStroke( 0 , new BasicStroke( 2.0f ) );
         plot.setRenderer( renderer );
         setContentPane( chartPanel );
     }
@@ -58,7 +59,7 @@ public class graphing extends ApplicationFrame {
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false );
         renderer.setSeriesPaint( 0 , Color.RED );
 
-        renderer.setSeriesStroke( 0 , new BasicStroke( 1.0f ) );
+        renderer.setSeriesStroke( 0 , new BasicStroke( 2.0f ) );
         plot.setRenderer( renderer );
         setContentPane( chartPanel );
     }
